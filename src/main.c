@@ -1,3 +1,5 @@
+#include "serial.h"
+ 
 static void qemu_gdb_hang(void)
 {
 #ifdef DEBUG
@@ -10,5 +12,6 @@ static void qemu_gdb_hang(void)
 void main(void)
 {
 	qemu_gdb_hang();
+    puts("Hello, world!");
 	while (1);
-}
+} 
