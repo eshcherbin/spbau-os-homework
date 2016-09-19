@@ -1,18 +1,18 @@
 #include "serial.h"
 #include "ioport.h"
-#include "utility.h"
+#include "utils.h"
 
 void init_serial_port()
 {
-    // set speed
+    /* set speed */
     out8(SERIAL_PORT(3), BIT(7));
     out8(SERIAL_PORT(0), 1);
     out8(SERIAL_PORT(1), 0);
 
-    // set other settings
+    /* set other settings */
     out8(SERIAL_PORT(3), BIT(0) | BIT(1));
 
-    // set polling
+    /* set polling */
     out8(SERIAL_PORT(1), 0);
 }
 
@@ -22,7 +22,7 @@ void putc(char c)
     while (!(in8(SERIAL_PORT(5)) & BIT(5)));
 }
 
-void puts(char *s)
+void puts(const char *s)
 {
     while (*s)
     {

@@ -9,6 +9,6 @@ void init_serial_port();
 
 void putc(char c);
 
-void puts(char* s);
+void puts(const char* s);
 
 #endif
