@@ -1,6 +1,7 @@
 #include "serial.h"
 #include "io.h"
 #include "interrupt.h"
+#include "timer.h"
  
 static void qemu_gdb_hang(void)
 {
@@ -32,6 +33,8 @@ void main(void)
 
     // interrupt test
     __asm__ volatile("int $225");
+
+    start_timer();
 
 	while (1);
 } 

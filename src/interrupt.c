@@ -40,7 +40,7 @@ void unmask_devices_slave(unsigned char mask)
 void unmask_devices_master(unsigned char mask)
 {
     current_mask_master &= (0xff ^ mask);
-    out8(MASTER_DATA_PORT, current_mask_slave);
+    out8(MASTER_DATA_PORT, current_mask_master);
 }
 
 void init_pic()
@@ -87,7 +87,7 @@ void send_eoi(unsigned short port)
 
 void common_handler(uint64_t interrupt_id)
 {
-    printf("Hi, i'm interrupt %llu\n", interrupt_id);
+    printf("Interrupt %llu\n", interrupt_id);
     
     // Master EOI
     if (32 <= interrupt_id && interrupt_id < 40)
