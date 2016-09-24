@@ -22,6 +22,8 @@ void putc(char c)
     while (!(in8(SERIAL_PORT(5)) & BIT(5)));
 }
 
+// unlike standart puts this implementation 
+// doesn't put a newline character in the end
 void puts(const char *s)
 {
     while (*s)
