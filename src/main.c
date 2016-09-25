@@ -15,7 +15,6 @@ static void qemu_gdb_hang(void)
 
 void init()
 {
-    init_backtrace((uint64_t*) __builtin_frame_address(0));
     init_serial_port();
     init_interrupt();
 }
@@ -24,6 +23,7 @@ void main(void)
 {
 	qemu_gdb_hang();
 
+    init_backtrace((uint64_t*) __builtin_frame_address(0));
     init();
 
     // printf test
@@ -35,6 +35,9 @@ void main(void)
 
     // interrupt test
     __asm__ volatile("int $225");
+
+    // backtrace test
+    print_backtrace();
 
     start_timer();
 

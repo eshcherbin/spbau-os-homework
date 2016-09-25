@@ -15,7 +15,7 @@ void print_backtrace()
     uint64_t* current_frame_address = (uint64_t*) __builtin_frame_address(0);
     while (current_frame_address != main_frame_address)
     {
-        printf("(%d)  %llx%s in\n", counter, *(current_frame_address + 1), (counter == 0) ? " (current)" : ""); // return address is 8(%rbp)
+        printf("(%d)  %llx in\n", counter, *(current_frame_address + 1)); // return address is 8(%rbp)
         current_frame_address = (uint64_t*) *current_frame_address;
         counter++;
     }

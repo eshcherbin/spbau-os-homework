@@ -554,7 +554,6 @@ common_prehandler:
 
     cld
     call common_handler
-    cld
 
     popq %r15
     popq %r14
