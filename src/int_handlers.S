@@ -543,7 +543,6 @@ common_prehandler:
     pushq %rcx
     pushq %rdx
     pushq %rbp
-    pushq %rdi
     pushq %rsi
     pushq %r9
     pushq %r10
@@ -553,7 +552,9 @@ common_prehandler:
     pushq %r14
     pushq %r15
 
+    cld
     call common_handler
+    cld
 
     popq %r15
     popq %r14
@@ -563,7 +564,6 @@ common_prehandler:
     popq %r10
     popq %r9
     popq %rsi
-    popq %rdi
     popq %rbp
     popq %rdx
     popq %rcx
