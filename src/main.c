@@ -2,6 +2,7 @@
 #include "io.h"
 #include "interrupt.h"
 #include "timer.h"
+#include "backtrace.h"
  
 static void qemu_gdb_hang(void)
 {
@@ -14,6 +15,7 @@ static void qemu_gdb_hang(void)
 
 void init()
 {
+    init_backtrace((uint64_t*) __builtin_frame_address(0));
     init_serial_port();
     init_interrupt();
 }
