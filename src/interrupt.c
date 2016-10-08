@@ -88,7 +88,7 @@ void send_eoi(unsigned short port)
 void common_handler(uint64_t interrupt_id)
 {
     printf("Interrupt %llu\n", interrupt_id);
-    
+
     // Master EOI
     if (32 <= interrupt_id && interrupt_id < 40)
         send_eoi(MASTER_COMMAND_PORT);
