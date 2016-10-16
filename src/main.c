@@ -46,5 +46,8 @@ void main(void)
     //start_timer();
     print_memmap();
 
+    void* page_addr = (void*) alloc_buddy(0);
+    printf("%llx\n", ((uint64_t*) page_addr)[0]);
+
     while (1);
 } 

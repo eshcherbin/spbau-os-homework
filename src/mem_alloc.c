@@ -2,12 +2,14 @@
 #include "memmap.h"
 #include "io.h"
 #include <limits.h>
+#include "utils.h"
 
 #define BUDDY_ID(id, level) ((id) ^ (1 << (level)))
 
 uint8_t num_levels;
 uint32_t *level_heads;
 struct buddy_page_desc *descriptors;
+uint64_t pages_start;
 
 void init_buddy()
 {
@@ -69,6 +71,8 @@ void init_buddy()
         level_heads[i] = UINT_MAX;
     level_heads[num_levels - 1] = 0;
 
+    pages_start = pm_l;
+
     printf("Buddy allocator initialized\n");
     printf("num_levels: %hhu\n", num_levels);
     printf("num_pages: %u\n", num_pages);
@@ -87,4 +91,10 @@ void occupy_buddy(uint32_t page_id, uint8_t level)
 {
     (void) page_id;
     (void) level;
+}
+
+uint64_t alloc_buddy(uint8_t level)
+{
+    (void) level;
+    return virt_addr(pages_start);
 }
