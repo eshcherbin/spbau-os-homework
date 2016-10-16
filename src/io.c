@@ -141,7 +141,7 @@ int vprintf(const char *format, va_list arg)
                         if (!format[3])
                             return -1;
                         item_ = va_arg(arg, int);
-                        tp = format[2];
+                        tp = format[3];
                         format += 4;
                     }
                     if (item_ < 0)

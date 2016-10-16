@@ -4,6 +4,7 @@
 #include "timer.h"
 #include "backtrace.h"
 #include "memmap.h"
+#include "mem_alloc.h"
  
 static void qemu_gdb_hang(void)
 {
@@ -19,6 +20,7 @@ void init()
     init_serial_port();
     init_interrupt();
     read_memmap();
+    init_buddy();
 }
 
 void main(void)
@@ -44,5 +46,5 @@ void main(void)
     //start_timer();
     print_memmap();
 
-	while (1);
+    while (1);
 } 

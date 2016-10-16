@@ -3,9 +3,10 @@
 
 #include <stdint.h>
 
-#define MEMMAP_TYPE_KERNEL 0
+#define MEMMAP_TYPE_KERNEL    0
 #define MEMMAP_TYPE_AVAILABLE 1
-#define MEMMAP_TYPE_RESERVED 2
+#define MEMMAP_TYPE_RESERVED  2
+#define MEMMAP_TYPE_ALLOC     3
 #define MAX_MEMMAP_TABLE_LENGTH 64
 
 struct memmap_entry
