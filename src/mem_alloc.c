@@ -85,5 +85,6 @@ uint32_t find_buddy(uint8_t level)
 
 void occupy_buddy(uint32_t page_id, uint8_t level)
 {
-
+    (void) page_id;
+    (void) level;
 }
