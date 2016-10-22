@@ -98,7 +98,7 @@ void init_buddy(void)
             }
             page_id = pm_l / PAGE_SIZE;
             descriptors[page_id].height = height;
-            free_buddy(pm_l);
+            free_buddy(virt_addr(pm_l));
             pm_l += PAGE_SIZE * (1ULL << height);
         }
     }
