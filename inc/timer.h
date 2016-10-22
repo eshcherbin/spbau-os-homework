@@ -6,6 +6,6 @@
 #define TIMER_COMMAND_PORT 0x43
 #define TIMER_DATA_PORT 0x40
 
-void start_timer();
+void start_timer(void);
 
 #endif

@@ -3,7 +3,7 @@
 #include "utils.h"
 #include "interrupt.h"
 
-void start_timer()
+void start_timer(void)
 {
     mask_devices_master(BIT(0));
 

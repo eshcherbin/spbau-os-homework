@@ -5,7 +5,7 @@
 
 #define SERIAL_PORT(n) (0x3f8 + n)
 
-void init_serial_port();
+void init_serial_port(void);
 
 void putc(char c);
 

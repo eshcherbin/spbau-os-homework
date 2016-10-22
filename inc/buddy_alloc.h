@@ -12,7 +12,7 @@ struct buddy_page_desc
     uint8_t free;
 } __attribute__((packed));
 
-void init_buddy();
+void init_buddy(void);
 uint32_t find_buddy(uint8_t level);
 void occupy_buddy(uint32_t page_id, uint8_t level);
 uint64_t alloc_buddy(uint8_t level);

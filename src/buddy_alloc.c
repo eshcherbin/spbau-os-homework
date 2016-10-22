@@ -37,7 +37,7 @@ void add_to_list(uint32_t page_id, uint8_t level)
     level_heads[level] = page_id;
 }
 
-void init_buddy()
+void init_buddy(void)
 {
     // range of physical memory used for allocation
     uint64_t pm_l = ULLONG_MAX;

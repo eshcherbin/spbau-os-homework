@@ -20,16 +20,16 @@ struct idt_entry
     uint32_t reserved;
 } __attribute__((packed));
 
-void init_idt();
+void init_idt(void);
 
 void mask_devices_slave(unsigned char mask);
 void mask_devices_master(unsigned char mask);
 void unmask_devices_slave(unsigned char mask);
 void unmask_devices_master(unsigned char mask);
 
-void init_pic();
+void init_pic(void);
 
-void init_interrupt();
+void init_interrupt(void);
 
 void add_idt_entry(int index, uint64_t entry);
 

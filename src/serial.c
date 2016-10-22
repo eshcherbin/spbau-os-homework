@@ -2,7 +2,7 @@
 #include "ioport.h"
 #include "utils.h"
 
-void init_serial_port()
+void init_serial_port(void)
 {
     /* set speed */
     out8(SERIAL_PORT(3), BIT(7));

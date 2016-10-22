@@ -10,7 +10,7 @@ static struct idt_entry idt[256];
 
 extern uint64_t interrupt_handlers[];
 
-void init_idt()
+void init_idt(void)
 {
     for (int i = 0; i < NUM_HANDLERS; i++)
         add_idt_entry(i, interrupt_handlers[i]);
@@ -43,7 +43,7 @@ void unmask_devices_master(unsigned char mask)
     out8(MASTER_DATA_PORT, current_mask_master);
 }
 
-void init_pic()
+void init_pic(void)
 {
     disable_ints();
 
@@ -64,7 +64,7 @@ void init_pic()
     enable_ints();
 }
 
-void init_interrupt()
+void init_interrupt(void)
 {
     init_idt();
     init_pic();

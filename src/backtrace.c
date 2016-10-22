@@ -8,7 +8,7 @@ void init_backtrace(uint64_t *main_frame_address_)
     main_frame_address = main_frame_address_;
 }
 
-void print_backtrace()
+void print_backtrace(void)
 {
     printf("Stack trace:\n");
     int counter = 0;

@@ -15,7 +15,7 @@ static void qemu_gdb_hang(void)
 #endif
 }
 
-void init()
+void init(void)
 {
     init_serial_port();
     init_interrupt();
