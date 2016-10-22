@@ -6,16 +6,19 @@
 
 struct buddy_page_desc
 {
-    uint32_t next;
-    uint32_t prev;
+    uint64_t next;
+    uint64_t prev;
     uint8_t level;
     uint8_t free;
+    uint8_t height;
 } __attribute__((packed));
 
+extern struct buddy_page_desc *descriptors;
+
 void init_buddy(void);
-uint32_t find_buddy(uint8_t level);
-void occupy_buddy(uint32_t page_id, uint8_t level);
+uint64_t find_buddy(uint8_t level);
+void occupy_buddy(uint64_t page_id, uint8_t level);
 uint64_t alloc_buddy(uint8_t level);
-void free_buddy(void *page_ptr);
+void free_buddy(uint64_t page_ptr);
 
 #endif

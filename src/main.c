@@ -53,11 +53,11 @@ void main(void)
     printf("%llx\n", page_addr_0);
     void* page_addr_1 = (void*) alloc_buddy(0);
     printf("%llx\n", page_addr_1);
-    free_buddy(page_addr_0);
+    free_buddy((uint64_t) page_addr_0);
     page_addr_0 = (void*) alloc_buddy(1);
     printf("%llx\n", page_addr_0);
-    free_buddy(page_addr_0);
-    free_buddy(page_addr_1);
+    free_buddy((uint64_t) page_addr_0);
+    free_buddy((uint64_t) page_addr_1);
     page_addr_0 = (void*) alloc_buddy(1);
     printf("%llx\n", page_addr_0);
 
