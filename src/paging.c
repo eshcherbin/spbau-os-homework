@@ -1,5 +1,6 @@
 #include "paging.h"
 #include "memmap.h"
+#include "utils.h"
 #include "buddy_alloc.h"
 
 #define NUM_RECORDS (512)
@@ -15,13 +16,13 @@ uint64_t* pml3_pages[NUM_RECORDS] = {0};
 
 void write_pml3(uint8_t index)
 {
-    *((uint64_t*) bootstrap_pml4 + index) = (uint64_t) pml3_pages[index] | PTE_PRESENT | PTE_WRITE;
+    *((uint64_t*) bootstrap_pml4 + index) = (uint64_t) phys_addr((uint64_t) pml3_pages[index]) | PTE_PRESENT | PTE_WRITE;
 }
 
 void init_paging(void)
 {
     uint32_t gb_to_map = mem_size / GB + (mem_size % GB == 0 ? 0 : 1);
-    uint32_t pml3_to_map = 2 * (gb_to_map / NUM_RECORDS + (gb_to_map % NUM_RECORDS == 0 ? 0 : 1)); // multiply by two to map both before and after hole
+    uint32_t pml3_to_map = gb_to_map / NUM_RECORDS + (gb_to_map % NUM_RECORDS == 0 ? 0 : 1);
     //find memory for pml3 pages in first 4Gb
     for (uint32_t i = 0; i < memmap_table_length; i++)
     {
@@ -38,14 +39,9 @@ void init_paging(void)
         uint64_t pages = (pm_r - pm_l) / PAGE_SIZE;
         if (pages >= pml3_to_map)
         {
-            for (uint32_t j = 0; j < pml3_to_map / 2; j++)
+            for (uint32_t j = 0; j < pml3_to_map; j++)
             {
-                pml3_pages[j] = (uint64_t*) pm_l;
-                pm_l += PAGE_SIZE;
-            }
-            for (uint32_t j = 0; j < pml3_to_map / 2; j++)
-            {
-                pml3_pages[j + NUM_RECORDS / 2] = (uint64_t*) pm_l;
+                pml3_pages[j + NUM_RECORDS / 2] = (uint64_t*) virt_addr(pm_l);
                 pm_l += PAGE_SIZE;
             }
             memmap_table_length++;
@@ -58,10 +54,7 @@ void init_paging(void)
         }
     }
     for (uint32_t i = 0; i < gb_to_map; i++)
-    {
-        map_large_page((uint64_t) GB * i, (uint64_t) GB * i);
         map_large_page((uint64_t) GB * i, SHIFTED_BASE + ((uint64_t) GB * i));
-    }
 }
 
 void map_large_page(uint64_t phys_addr, uint64_t virt_addr)

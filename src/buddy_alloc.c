@@ -47,7 +47,7 @@ void init_buddy(void)
             continue;
         if (memmap_table[i].len >= total_pages * sizeof(struct buddy_page_desc))
         {
-            descriptors = (struct buddy_page_desc*) memmap_table[i].addr;
+            descriptors = (struct buddy_page_desc*) virt_addr(memmap_table[i].addr);
             memmap_table_length++;
             memmap_table[memmap_table_length - 1].type = MEMMAP_TYPE_KERNEL;
             memmap_table[memmap_table_length - 1].len = total_pages * sizeof(struct buddy_page_desc);
