@@ -6,12 +6,13 @@
 
 struct buddy_page_desc
 {
+    void *block_ctl;
     uint64_t next;
     uint64_t prev;
     uint8_t level;
     uint8_t free;
     uint8_t height;
-} __attribute__((packed));
+};
 
 extern struct buddy_page_desc *descriptors;
 

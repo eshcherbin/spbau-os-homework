@@ -6,6 +6,7 @@
 #include "memmap.h"
 #include "buddy_alloc.h"
 #include "paging.h"
+#include "block_alloc.h"
  
 static void qemu_gdb_hang(void)
 {
@@ -49,17 +50,34 @@ void main(void)
     print_memmap();
 
     // buddy test
-    void* page_addr_0 = (void*) alloc_buddy(0);
+    /*void* page_addr_0 = (void*) alloc_buddy(0);
     printf("%llx\n", page_addr_0);
     void* page_addr_1 = (void*) alloc_buddy(0);
     printf("%llx\n", page_addr_1);
     free_buddy((uint64_t) page_addr_0);
-    page_addr_0 = (void*) alloc_buddy(1);
+    page_addr_0 = (void*) alloc_buddy(5);
+    printf("%llx\n", page_addr_0);
+    free_buddy((uint64_t) page_addr_0);
+    page_addr_0 = (void*) alloc_buddy(5);
     printf("%llx\n", page_addr_0);
     free_buddy((uint64_t) page_addr_0);
     free_buddy((uint64_t) page_addr_1);
     page_addr_0 = (void*) alloc_buddy(1);
-    printf("%llx\n", page_addr_0);
+    printf("%llx\n", page_addr_0);*/
+
+    //block allocator test
+    struct block_allocator_ctl *ctl_0 = create_block_allocator(PAGE_SIZE / 8);
+    for (int i = 0; i < 11; i++)
+    {
+        void *addr = alloc_block(ctl_0);
+        printf("0: %llx\n", addr);
+    }
+    struct block_allocator_ctl *ctl_1 = create_block_allocator(PAGE_SIZE);
+    for (int i = 0; i < 11; i++)
+    {
+        void *addr = alloc_block(ctl_1);
+        printf("1: %llx\n", addr);
+    }
 
     while (1);
 }
