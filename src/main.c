@@ -5,6 +5,7 @@
 #include "backtrace.h"
 #include "memmap.h"
 #include "buddy_alloc.h"
+#include "paging.h"
  
 static void qemu_gdb_hang(void)
 {
@@ -20,6 +21,7 @@ void init(void)
     init_serial_port();
     init_interrupt();
     read_memmap();
+    init_paging();
     init_buddy();
 }
 

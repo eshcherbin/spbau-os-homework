@@ -3,6 +3,7 @@
 
 uint32_t memmap_table_length = 0;
 struct memmap_entry memmap_table[MAX_MEMMAP_TABLE_LENGTH];
+uint64_t mem_size;
 
 extern uint64_t multiboot_info;
 extern uint64_t text_phys_begin;
@@ -63,6 +64,10 @@ void read_memmap(void)
 
         memmap_table[memmap_table_length++] = entry;
     }
+
+    for (uint32_t i = 0; i < memmap_table_length; i++)
+        if (mem_size < memmap_table[i].addr + memmap_table[i].len)
+            mem_size = memmap_table[i].addr + memmap_table[i].len;
 }
 
 void print_memmap(void)

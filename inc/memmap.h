@@ -18,6 +18,7 @@ struct memmap_entry
 
 extern uint32_t memmap_table_length;
 extern struct memmap_entry memmap_table[];
+extern uint64_t mem_size;
 
 void read_memmap(void);
 void print_memmap(void);
