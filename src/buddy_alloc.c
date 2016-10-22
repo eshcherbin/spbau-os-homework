@@ -137,12 +137,12 @@ uint64_t alloc_buddy(uint8_t level)
     if (page_id == ULLONG_MAX)
         return 0;
     occupy_buddy(page_id, level);
-    return (uint64_t) page_id * PAGE_SIZE;
+    return virt_addr((uint64_t) page_id * PAGE_SIZE);
 }
 
 void free_buddy(uint64_t page_ptr)
 {
-    uint64_t page_id = page_ptr / PAGE_SIZE;
+    uint64_t page_id = phys_addr(page_ptr) / PAGE_SIZE;
     descriptors[page_id].free = 1;
     while (descriptors[page_id].level < descriptors[page_id].height &&
             descriptors[BUDDY_ID(page_id, descriptors[page_id].level)].free)
