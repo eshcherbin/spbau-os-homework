@@ -1,4 +1,4 @@
-#include "mem_alloc.h"
+#include "buddy_alloc.h"
 #include "memmap.h"
 #include "io.h"
 #include <limits.h>
@@ -10,6 +10,32 @@ uint8_t num_levels;
 uint32_t *level_heads;
 struct buddy_page_desc *descriptors;
 uint64_t pages_start;
+
+void delete_from_list(uint32_t page_id, uint8_t level)
+{
+    if (descriptors[page_id].next != page_id)
+    {
+        descriptors[descriptors[page_id].next].prev = descriptors[page_id].prev;
+        descriptors[descriptors[page_id].prev].next = descriptors[page_id].next;
+        level_heads[level] = descriptors[page_id].next;
+        descriptors[page_id].next = page_id;
+        descriptors[page_id].prev = page_id;
+    }
+    else
+        level_heads[level] = UINT_MAX;
+}
+
+void add_to_list(uint32_t page_id, uint8_t level)
+{
+    if (level_heads[level] != UINT_MAX)
+    {
+        descriptors[page_id].next = level_heads[level];
+        descriptors[page_id].prev = descriptors[level_heads[level]].prev;
+        descriptors[descriptors[page_id].next].prev = page_id;
+        descriptors[descriptors[page_id].prev].next = page_id;
+    }
+    level_heads[level] = page_id;
+}
 
 void init_buddy()
 {
@@ -41,7 +67,7 @@ void init_buddy()
         pm_l += (PAGE_SIZE - pm_l % PAGE_SIZE);
     pm_r -= pm_r % PAGE_SIZE;
 
-    // assume that heads won't occupy more than a 
+    // assume that heads won't occupy more than a page
     pm_r -= PAGE_SIZE;
     level_heads = (uint32_t*) pm_r;
 
@@ -89,12 +115,47 @@ uint32_t find_buddy(uint8_t level)
 
 void occupy_buddy(uint32_t page_id, uint8_t level)
 {
-    (void) page_id;
-    (void) level;
+    while (level < descriptors[page_id].level)
+    {
+        //split
+        delete_from_list(page_id, descriptors[page_id].level);
+        descriptors[page_id].level--;
+        descriptors[BUDDY_ID(page_id, descriptors[page_id].level)].free = 1;
+        descriptors[BUDDY_ID(page_id, descriptors[page_id].level)].level = descriptors[page_id].level;
+        add_to_list(page_id, descriptors[page_id].level);
+        add_to_list(BUDDY_ID(page_id, descriptors[page_id].level), descriptors[page_id].level);
+    }
+    descriptors[page_id].free = 0;
+    delete_from_list(page_id, level);
 }
 
 uint64_t alloc_buddy(uint8_t level)
 {
-    (void) level;
-    return virt_addr(pages_start);
+    uint32_t page_id = find_buddy(level);
+    if (page_id == UINT_MAX)
+        return 0;
+    occupy_buddy(page_id, level);
+    return pages_start + (uint64_t) page_id * PAGE_SIZE;
+}
+
+void free_buddy(void *page_ptr)
+{
+    uint32_t page_id = ((uint64_t) page_ptr - pages_start) / PAGE_SIZE;
+    descriptors[page_id].free = 1;
+    while (descriptors[page_id].level + 1 < num_levels &&
+            descriptors[BUDDY_ID(page_id, descriptors[page_id].level)].free)
+    {
+        //merge
+        uint32_t buddy_id = BUDDY_ID(page_id, descriptors[page_id].level);
+        delete_from_list(buddy_id, descriptors[buddy_id].level);
+        if (page_id > buddy_id)
+        {
+            uint32_t tmp = page_id;
+            page_id = buddy_id;
+            buddy_id = tmp;
+        }
+        descriptors[buddy_id].free = 0;
+        descriptors[page_id].level++;
+    }
+    add_to_list(page_id, descriptors[page_id].level);
 }

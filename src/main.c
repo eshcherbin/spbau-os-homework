@@ -4,7 +4,7 @@
 #include "timer.h"
 #include "backtrace.h"
 #include "memmap.h"
-#include "mem_alloc.h"
+#include "buddy_alloc.h"
  
 static void qemu_gdb_hang(void)
 {
@@ -46,8 +46,18 @@ void main(void)
     //start_timer();
     print_memmap();
 
-    void* page_addr = (void*) alloc_buddy(0);
-    printf("%llx\n", ((uint64_t*) page_addr)[0]);
+    // buddy test
+    void* page_addr_0 = (void*) alloc_buddy(0);
+    printf("%llx\n", page_addr_0);
+    void* page_addr_1 = (void*) alloc_buddy(0);
+    printf("%llx\n", page_addr_1);
+    free_buddy(page_addr_0);
+    page_addr_0 = (void*) alloc_buddy(1);
+    printf("%llx\n", page_addr_0);
+    free_buddy(page_addr_0);
+    free_buddy(page_addr_1);
+    page_addr_0 = (void*) alloc_buddy(1);
+    printf("%llx\n", page_addr_0);
 
     while (1);
-} 
+}

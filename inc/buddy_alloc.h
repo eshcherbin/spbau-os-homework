@@ -1,5 +1,5 @@
-#ifndef __MEM_ALLOC_H__
-#define __MEM_ALLOC_H__
+#ifndef __BUDDY_ALLOC_H__
+#define __BUDDY_ALLOC_H__
 
 #include "memory.h"
 #include <stdint.h>
@@ -16,6 +16,6 @@ void init_buddy();
 uint32_t find_buddy(uint8_t level);
 void occupy_buddy(uint32_t page_id, uint8_t level);
 uint64_t alloc_buddy(uint8_t level);
-void free_buddy(void *page_ptr, uint8_t level);
+void free_buddy(void *page_ptr);
 
 #endif
