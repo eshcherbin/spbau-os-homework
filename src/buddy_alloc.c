@@ -89,6 +89,7 @@ void init_buddy(void)
             uint64_t stop_id = page_id + (1ULL << height);
             while (page_id < stop_id)
             {
+                descriptors[page_id].block_ctl = 0;
                 descriptors[page_id].next = page_id;
                 descriptors[page_id].prev = page_id;
                 descriptors[page_id].level = height;

@@ -7,6 +7,7 @@
 #include "buddy_alloc.h"
 #include "paging.h"
 #include "block_alloc.h"
+#include "mem_alloc.h"
  
 static void qemu_gdb_hang(void)
 {
@@ -65,7 +66,7 @@ void main(void)
     page_addr_0 = (void*) alloc_buddy(1);
     printf("%llx\n", page_addr_0);*/
 
-    //block allocator test
+    // block allocator test
     struct block_allocator_ctl *ctl_0 = create_block_allocator(PAGE_SIZE / 8);
     for (int i = 0; i < 11; i++)
     {
@@ -78,6 +79,22 @@ void main(void)
         void *addr = alloc_block(ctl_1);
         printf("1: %llx\n", addr);
     }
+
+    // malloc test
+    void *page_addr_2 = malloc(10 * sizeof(int));
+    printf("%llx\n", page_addr_2);
+    void *page_addr_3 = malloc(100 * sizeof(int));
+    printf("%llx\n", page_addr_3);
+    free(page_addr_3);
+    page_addr_3 = malloc(100 * sizeof(int));
+    printf("%llx\n", page_addr_3);
+    free(page_addr_3);
+    void *page_addr_4 = malloc(10117 * sizeof(int));
+    printf("%llx\n", page_addr_4);
+    free(page_addr_4);
+    page_addr_4 = malloc(100117 * sizeof(int));
+    printf("%llx\n", page_addr_4);
+    free(page_addr_4);
 
     while (1);
 }
